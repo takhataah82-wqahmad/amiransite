@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>مدرسه امیران</title>
+  <style>
+    :root {
+      --bg: #f2f6ff;
+      --text: #1a2a4a;
+      --card: #ffffff;
+      --primary: #0d3b8b;
+      --shadow: rgba(0,0,0,0.12);
+      --accent: #1e6bd8;
+    }
+    [data-theme="dark"] {
+      --bg: #0b1020;
+      --text: #e9ecff;
+      --card: #121835;
+      --shadow: rgba(0,0,0,0.4);
+      --accent: #2b4bb7;
+    }
+    * { box-sizing: border-box; }
+    body {
+      font-family: Tahoma, sans-serif;
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      transition: background 0.3s, color 0.3s;
+    }
+    header {
+      background: linear-gradient(90deg, #0d3b8b, #1e6bd8);
+      color: white;
+      padding: 30px 20px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    header h1 { margin: 0; font-size: 36px; cursor: pointer; user-select: none; }
+    header p { margin: 5px 0 0; font-size: 16px; opacity: 0.9; }
+    header .hero {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      width: 55%;
+      height: 100%;
+      background-image: url("https://images.pexels.com/photos/256401/pexels-photo-256401.jpeg");
+      background-size: cover;
+      background-position: center;
+      opacity: 0.25;
+      filter: blur(1px);
+    }
+    .theme-switch {
+      position: absolute;
+      left: 20px;
+      top: 20px;
+      padding: 8px 12px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.2);
+      border: 1px solid rgba(255,255,255,0.4);
+      cursor: pointer;
+      font-weight: bold;
+    }
+    .container { max-width: 1100px; margin: 30px auto; padding: 0 20px; }
+    .card {
+      background: var(--card);
+      border-radius: 14px;
+      padding: 20px;
+      box-shadow: 0 8px 22px var(--shadow);
+      margin-bottom: 20px;
+      transition: transform 0.2s;
+    }
+    .card:hover { transform: translateY(-3px); }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+    }
+    .card h2 { margin-top: 0; }
+    .btn {
+      display: inline-block;
+      background: var(--primary);
+      color: white;
+      padding: 10px 18px;
+      border-radius: 12px;
+      text-decoration: none;
+      font-weight: bold;
+      cursor: pointer;
+      border: none;
+    }
+    input, select, textarea {
+      width: 100%;
+      padding: 12px;
+      border-radius: 12px;
+      border: 1px solid #ddd;
+      margin-top: 10px;
+      outline: none;
+      background: #f7f7f7;
+    }
+    [data-theme="dark"] input, [data-theme="dark"] select, [data-theme="dark"] textarea {
+      background: #0b1326;
+      border: 1px solid #2b3a6a;
+      color: var(--text);
+    }
+    footer { text-align: center; padding: 20px; margin-top: 20px; color: #555; font-size: 14px; }
+    .list { margin-top: 10px; border-top: 1px solid #ddd; padding-top: 10px; }
+    .item {
+      padding: 10px;
+      border-radius: 12px;
+      background: #f5f5f5;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    [data-theme="dark"] .item {
+      background: #0c1428;
+      border: 1px solid #2b3a6a;
+    }
+    .delete-btn {
+      background: #d12a2a;
+      padding: 6px 12px;
+      border-radius: 10px;
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    .tabs {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+    .tab {
+      padding: 10px 14px;
+      border-radius: 12px;
+      background: #eaf1ff;
+      cursor: pointer;
+      border: 1px solid #c5d4ff;
+      font-weight: bold;
+    }
+    [data-theme="dark"] .tab { background: #0c1428; border: 1px solid #2b3a6a; }
+    .tab.active { background: var(--accent); color: white; }
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      background: var(--primary);
+      color: white;
+      padding: 12px 18px;
+      border-radius: 14px;
+      box-shadow: 0 8px 22px var(--shadow);
+      display: none;
+      font-weight: bold;
+      z-index: 999;
+    }
+    .class-card {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px;
+      border-radius: 14px;
+      background: #f5f7ff;
+      border: 1px solid #d8e3ff;
+    }
+    [data-theme="dark"] .class-card {
+      background: #0c1428;
+      border: 1px solid #2b3a6a;
+    }
+    .class-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      font-weight: bold;
+      font-size: 18px;
+    }
+    .class-info { flex: 1; text-align: left; }
+    .class-info h3 { margin: 0; }
+    .class-info p { margin: 5px 0 0; opacity: 0.8; }
+
+    /* God Panel */
+    #godPanel {
+      position: fixed;
+      top: 10%;
+      left: 50%;
+      transform: translateX(-50%);
+      background: black;
+      color: red;
+      padding: 20px;
+      border-radius: 10px;
+      z-index: 9999;
+      box-shadow: 0 0 40px red;
+      width: 90%;
+      max-width: 700px;
+      display: none;
+    }
+    #godPanel h2 { margin: 0; text-align: center; }
+    #commandConsole input {
+      width: 70%;
+      padding: 8px;
+      margin-bottom: 10px;
+      border-radius: 8px;
+      border: 1px solid #444;
+      background: #111;
+      color: white;
+    }
+    #commandConsole button {
+      padding: 8px;
+      border-radius: 8px;
+      border: none;
+      background: #d12a2a;
+      color: white;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    #cmdOutput {
+      margin-top: 10px;
+      color: white;
+      background: #222;
+      padding: 10px;
+      border-radius: 5px;
+      min-height: 40px;
+    }
+
+    /* God Arena */
+    #godArena {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.9);
+      z-index: 9998;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+    #arenaCanvas {
+      width: 90%;
+      max-width: 900px;
+      height: 450px;
+      background: #000;
+      border-radius: 16px;
+      box-shadow: 0 0 40px rgba(255,0,0,0.5);
+    }
+    #arenaControls {
+      margin-top: 12px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    #arenaControls .btn {
+      background: #d12a2a;
+    }
+    #hpBar {
+      width: 90%;
+      max-width: 900px;
+      margin-top: 12px;
+      display: flex;
+      gap: 10px;
+      justify-content: space-between;
+    }
+    .hp {
+      width: 48%;
+      height: 12px;
+      border-radius: 10px;
+      background: #444;
+      overflow: hidden;
+      border: 1px solid #222;
+    }
+    .hp > div {
+      height: 100%;
+      background: linear-gradient(90deg, #d12a2a, #ff6b6b);
+      width: 100%;
+    }
+    .hp-label {
+      color: white;
+      font-weight: bold;
+      margin-top: 4px;
+    }
+
+    /* Mode Modal */
+    #modeModal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.8);
+      z-index: 9999;
+      justify-content: center;
+      align-items: center;
+    }
+    #modeModal .modal {
+      width: 90%;
+      max-width: 450px;
+      background: #111;
+      color: white;
+      padding: 20px;
+      border-radius: 16px;
+      box-shadow: 0 0 40px rgba(255,0,0,0.5);
+    }
+    #modeModal .modal h3 { margin: 0 0 10px; text-align: center; }
+    #modeModal .modal .option {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px;
+      border-radius: 12px;
+      background: #222;
+      margin-top: 10px;
+      cursor: pointer;
+      border: 1px solid #333;
+    }
+    #modeModal .modal .option:hover {
+      background: #333;
+    }
+    #modeModal .modal .option span {
+      font-weight: bold;
+    }
+    #modeModal .modal .option small {
+      opacity: 0.8;
+    }
+    #modeModal .modal .actions {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 15px;
+    }
+    #modeModal .modal .actions .btn {
+      background: #d12a2a;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <button class="theme-switch" onclick="toggleTheme()">تغییر حالت</button>
+    <h1 id="schoolName">مدرسه امیران</h1>
+    <p>یک سایت رسمی و خفن برای مدرسه</p>
+    <div class="hero"></div>
+  </header>
+
+  <div class="container">
+    <div class="card">
+      <h2>مدیر: مچاسبه</h2>
+      <h2>معاون: شوکاوی</h2>
+      <h2>پرورشی: نصاری</h2>
+      <h3>بقیه معلم‌ها توسط دانش‌آموزان نوشته می‌شوند</h3>
+      <hr>
+      <h3>کلاس‌ها:</h3>
+      <div class="grid">
+        <div class="class-card">
+          <div class="class-icon">7A</div>
+          <div class="class-info">
+            <h3>هفتم الف</h3>
+            <p>تعداد دانش‌آموز: <span id="count-7a">—</span></p>
+          </div>
+          <button class="btn" onclick="openCountForm('7A')">ثبت تعداد</button>
+        </div>
+        <div class="class-card">
+          <div class="class-icon">7B</div>
+          <div class="class-info">
+            <h3>هفتم ب</h3>
+            <p>تعداد دانش‌آموز: <span id="count-7b">—</span></p>
+          </div>
+          <button class="btn" onclick="openCountForm('7B')">ثبت تعداد</button>
+        </div>
+        <div class="class-card">
+          <div class="class-icon">8A</div>
+          <div class="class-info">
+            <h3>هشتم الف</h3>
+            <p>تعداد دانش‌آموز: <span id="count-8a">—</span></p>
+          </div>
+          <button class="btn" onclick="openCountForm('8A')">ثبت تعداد</button>
+        </div>
+        <div class="class-card">
+          <div class="class-icon">8B</div>
+          <div class="class-info">
+            <h3>هشتم ب</h3>
+            <p>تعداد دانش‌آموز: <span id="count-8b">—</span></p>
+          </div>
+          <button class="btn" onclick="openCountForm('8B')">ثبت تعداد</button>
+        </div>
+        <div class="class-card">
+          <div class="class-icon">9</div>
+          <div class="class-info">
+            <h3>نهم</h3>
+            <p>تعداد دانش‌آموز: <span id="count-9">—</span></p>
+          </div>
+          <button class="btn" onclick="openCountForm('9')">ثبت تعداد</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>فرم دانش‌آموزان و معلم‌ها</h2>
+      <div class="tabs">
+        <div class="tab active" data-tab="students" onclick="switchTab('students')">دانش‌آموزان</div>
+        <div class="tab" data-tab="teachers" onclick="switchTab('teachers')">معلم‌ها</div>
+        <div class="tab" data-tab="vote" onclick="switchTab('vote')">رای‌گیری</div>
+      </div>
+
+      <div id="students" class="tabContent">
+        <h3>ثبت دانش‌آموز</h3>
+        <input id="studentName" placeholder="نام دانش‌آموز" />
+        <select id="studentClass">
+          <option value="7A">هفتم الف</option>
+          <option value="7B">هفتم ب</option>
+          <option value="8A">هشتم الف</option>
+          <option value="8B">هشتم ب</option>
+          <option value="9">نهم</option>
+        </select>
+        <button class="btn" onclick="addStudent()">ثبت</button>
+        <div class="list" id="studentList"></div>
+      </div>
+
+      <div id="teachers" class="tabContent hidden">
+        <h3>ثبت معلم</h3>
+        <input id="teacherName" placeholder="نام معلم" />
+        <input id="teacherSubject" placeholder="درس" />
+        <button class="btn" onclick="addTeacher()">ثبت</button>
+        <div class="list" id="teacherList"></div>
+      </div>
+
+      <div id="vote" class="tabContent hidden">
+        <h3>رای‌گیری دانش‌آموزی</h3>
+        <p>موضوع رای: بهترین معلم</p>
+        <input id="voteName" placeholder="نام معلم را وارد کنید" />
+        <button class="btn" onclick="castVote()">رای بده</button>
+        <div class="list" id="voteResults"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <!-- God Panel -->
+  <div id="godPanel">
+    <h2>⚠️ GOD MODE ⚠️</h2>
+
+    <div id="commandConsole" style="margin-top:15px;">
+      <h3>🧠 Command Console</h3>
+      <input id="cmdInput" placeholder="Type command..." />
+      <button onclick="runCommand()">Run</button>
+      <div id="cmdOutput"></div>
+    </div>
+
+    <button class="btn" style="margin-top:12px;" onclick="openArena()">شروع جنگ خفن</button>
+    <button class="btn" style="margin-top:12px;background:#1e6bd8;" onclick="exitGodMode()">بازگشت به حالت عادی</button>
+  </div>
+
+  <!-- God Arena -->
+  <div id="godArena">
+    <canvas id="arenaCanvas"></canvas>
+    <div id="hpBar">
+      <div>
+        <div class="hp-label">God 1</div>
+        <div class="hp"><div id="hp1"></div></div>
+      </div>
+      <div>
+        <div class="hp-label">God 2</div>
+        <div class="hp"><div id="hp2"></div></div>
+      </div>
+    </div>
+    <div id="arenaControls">
+      <button class="btn" onclick="startFight()">شروع جنگ</button>
+      <button class="btn" style="background:#1e6bd8;" onclick="closeArena()">بستن</button>
+    </div>
+  </div>
+
+  <!-- Mode Modal -->
+  <div id="modeModal">
+    <div class="modal">
+      <h3>انتخاب حالت</h3>
+      <div class="option" onclick="selectMode('admin')">
+        <span>حالت مدیر</span>
+        <small>رمز: ADMIN_MODE</small>
+      </div>
+      <div class="option" onclick="selectMode('god')">
+        <span>حالت گاد</span>
+        <small>رمز: GOD_MODE</small>
+      </div>
+      <div class="option" onclick="selectMode('secret')">
+        <span>حالت مخفی</span>
+        <small>رمز: SECRET_MODE</small>
+      </div>
+      <div class="actions">
+        <button class="btn" onclick="closeModeModal()">لغو</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Theme
+    function toggleTheme() {
+      const root = document.documentElement;
+      if (root.getAttribute("data-theme") === "dark") {
+        root.removeAttribute("data-theme");
+      } else {
+        root.setAttribute("data-theme", "dark");
+      }
+    }
+
+    // Tabs
+    function switchTab(tab) {
+      document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+      document.querySelector(`[data-tab="${tab}"]`).classList.add("active");
+      document.querySelectorAll(".tabContent").forEach(c => c.classList.add("hidden"));
+      document.getElementById(tab).classList.remove("hidden");
+    }
+
+    // Storage
+    const storage = {
+      get(key, def) {
+        const v = localStorage.getItem(key);
+        return v ? JSON.parse(v) : def;
+      },
+      set(key, val) {
+        localStorage.setItem(key, JSON.stringify(val));
+      }
+    };
+
+    // Students
+    function addStudent() {
+      const name = document.getElementById("studentName").value.trim();
+      const cls = document.getElementById("studentClass").value;
+      if (!name) return showToast("اسم دانش‌آموز وارد نشده");
+      const students = storage.get("students", []);
+      students.push({ name, cls });
+      storage.set("students", students);
+      document.getElementById("studentName").value = "";
+      renderStudents();
+    }
+
+    function renderStudents() {
+      const students = storage.get("students", []);
+      const list = document.getElementById("studentList");
+      list.innerHTML = "";
+      students.forEach((s, i) => {
+        const div = document.createElement("div");
+        div.className = "item";
+        div.innerHTML = `<span>${s.name} - ${s.cls}</span>
+                         <button class="delete-btn" onclick="deleteStudent(${i})">حذف</button>`;
+        list.appendChild(div);
+      });
+      updateCounts();
+    }
+
+    function deleteStudent(i) {
+      const students = storage.get("students", []);
+      students.splice(i, 1);
+      storage.set("students", students);
+      renderStudents();
+    }
+
+    // Teachers
+    function addTeacher() {
+      const name = document.getElementById("teacherName").value.trim();
+      const subject = document.getElementById("teacherSubject").value.trim();
+      if (!name || !subject) return showToast("اسم یا درس وارد نشده");
+      const teachers = storage.get("teachers", []);
+      teachers.push({ name, subject });
+      storage.set("teachers", teachers);
+      document.getElementById("teacherName").value = "";
+      document.getElementById("teacherSubject").value = "";
+      renderTeachers();
+    }
+
+    function renderTeachers() {
+      const teachers = storage.get("teachers", []);
+      const list = document.getElementById("teacherList");
+      list.innerHTML = "";
+      teachers.forEach((t, i) => {
+        const div = document.createElement("div");
+        div.className = "item";
+        div.innerHTML = `<span>${t.name} - ${t.subject}</span>
+                         <button class="delete-btn" onclick="deleteTeacher(${i})">حذف</button>`;
+        list.appendChild(div);
+      });
+    }
+
+    function deleteTeacher(i) {
+      const teachers = storage.get("teachers", []);
+      teachers.splice(i, 1);
+      storage.set("teachers", teachers);
+      renderTeachers();
+    }
+
+    // Vote
+    function castVote() {
+      const name = document.getElementById("voteName").value.trim();
+      if (!name) return showToast("نام معلم وارد نشده");
+      const votes = storage.get("votes", {});
+      votes[name] = (votes[name] || 0) + 1;
+      storage.set("votes", votes);
+      document.getElementById("voteName").value = "";
+      renderVotes();
+    }
+
+    function renderVotes() {
+      const votes = storage.get("votes", {});
+      const list = document.getElementById("voteResults");
+      list.innerHTML = "";
+      const entries = Object.entries(votes).sort((a,b)=>b[1]-a[1]);
+      entries.forEach(([name, count]) => {
+        const div = document.createElement("div");
+        div.className = "item";
+        div.innerHTML = `<span>${name}</span><span>${count} رای</span>`;
+        list.appendChild(div);
+      });
+    }
+
+    function showToast(msg) {
+      const t = document.getElementById("toast");
+      t.innerText = msg;
+      t.style.display = "block";
+      setTimeout(()=> t.style.display = "none", 2200);
+    }
+
+    // Counts
+    function openCountForm(cls) {
+      const num = prompt("تعداد دانش‌آموزان کلاس " + cls + " را وارد کن:");
+      if (!num || isNaN(num)) return showToast("عدد معتبر وارد کن");
+      const counts = storage.get("counts", {});
+      counts[cls] = Number(num);
+      storage.set("counts", counts);
+      updateCounts();
+    }
+
+    function updateCounts() {
+      const counts = storage.get("counts", {});
+      document.getElementById("count-7a").innerText = counts["7A"] ?? "—";
+      document.getElementById("count-7b").innerText = counts["7B"] ?? "—";
+      document.getElementById("count-8a").innerText = counts["8A"] ?? "—";
+      document.getElementById("count-8b").innerText = counts["8B"] ?? "—";
+      document.getElementById("count-9").innerText = counts["9"] ?? "—";
+    }
+
+    // God Mode
+    let clickCount = 0;
+    let godUnlocked = false;
+    document.getElementById("schoolName").addEventListener("click", () => {
+      clickCount++;
+      setTimeout(() => clickCount = 0, 800);
+      if (clickCount === 3 && !godUnlocked) {
+        openModeModal();
+      }
+    });
+
+    function openModeModal() {
+      document.getElementById("modeModal").style.display = "flex";
+    }
+    function closeModeModal() {
+      document.getElementById("modeModal").style.display = "none";
+      clickCount = 0;
+    }
+
+    function selectMode(mode) {
+      const correct = {
+        admin: "ADMIN_MODE",
+        god: "GOD_MODE",
+        secret: "SECRET_MODE"
+      };
+
+      const pass = prompt("رمز " + mode + " را وارد کن:");
+      if (pass === correct[mode]) {
+        if (mode === "god") {
+          document.getElementById("godPanel").style.display = "block";
+          showToast("گاد مود فعال شد");
+        }
+        if (mode === "admin") {
+          showToast("حالت مدیر فعال شد");
+        }
+        if (mode === "secret") {
+          showToast("حالت مخفی فعال شد");
+        }
+      } else {
+        showToast("رمز اشتباهه");
+      }
+      closeModeModal();
+    }
+
+    const commands = {
+      "STATUS": () => "System stable. No anomalies detected.",
+      "LOCK": () => {
+        document.querySelectorAll("input, button").forEach(el => el.disabled = true);
+        return "All inputs locked.";
+      },
+      "UNLOCK": () => {
+        document.querySelectorAll("input, button").forEach(el => el.disabled = false);
+        return "All inputs unlocked.";
+      },
+      "CLEAR": () => {
+        localStorage.clear();
+        renderStudents(); renderTeachers(); renderVotes(); updateCounts();
+        return "Local storage cleared.";
+      },
+      "ECHO": (arg) => arg,
+      "GOD": () => "You are not ready for this.",
+    };
+
+    function runCommand() {
+      const input = document.getElementById("cmdInput").value.trim();
+      const [cmd, ...args] = input.split(" ");
+      const upper = cmd.toUpperCase();
+      if (commands[upper]) {
+        const result = commands[upper](args.join(" "));
+        document.getElementById("cmdOutput").innerText = result;
+      } else {
+        document.getElementById("cmdOutput").innerText = "Unknown command.";
+      }
+    }
+
+    function exitGodMode() {
+      document.getElementById("godPanel").style.display = "none";
+      godUnlocked = false;
+      clickCount = 0;
+      document.getElementById("cmdOutput").innerText = "";
+      document.getElementById("cmdInput").value = "";
+      closeArena();
+    }
+
+    // God Arena (Battle)
+    const arena = document.getElementById("godArena");
+    const canvas = document.getElementById("arenaCanvas");
+    const ctx = canvas.getContext("2d");
+    let hp1 = 100, hp2 = 100;
+    let fightRunning = false;
+    let animationId = null;
+
+    function openArena() {
+      arena.style.display = "flex";
+      resizeCanvas();
+      drawArena(true);
+    }
+
+    function closeArena() {
+      arena.style.display = "none";
+      fightRunning = false;
+      hp1 = hp2 = 100;
+      updateHP();
+      if (animationId) cancelAnimationFrame(animationId);
+    }
+
+    function resizeCanvas() {
+      const rect = canvas.getBoundingClientRect();
+      canvas.width = rect.width;
+      canvas.height = rect.height;
+    }
+
+    window.addEventListener("resize", () => {
+      if (arena.style.display === "flex") {
+        resizeCanvas();
+        drawArena(true);
+      }
+    });
+
+    function updateHP() {
+      document.getElementById("hp1").style.width = hp1 + "%";
+      document.getElementById("hp2").style.width = hp2 + "%";
+    }
+
+    function drawArena(clearStars = false) {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      const grad = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+      grad.addColorStop(0, "#000");
+      grad.addColorStop(1, "#0a0a0a");
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // Stars (fixed positions so it won't flicker)
+      for (let i = 0; i < 80; i++) {
+        const x = (i * 37) % canvas.width;
+        const y = (i * 53) % canvas.height;
+        const r = (i % 3) + 1;
+        ctx.fillStyle = "rgba(255,255,255,0.18)";
+        ctx.beginPath();
+        ctx.arc(x, y, r, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      const g1 = { x: canvas.width * 0.25, y: canvas.height * 0.5, r: 60 };
+      const g2 = { x: canvas.width * 0.75, y: canvas.height * 0.5, r: 60 };
+
+      drawGod(g1, "#ff2a2a");
+      drawGod(g2, "#2a9bff");
+      updateHP();
+    }
+
+    function drawGod(g, color) {
+      const glow = ctx.createRadialGradient(g.x, g.y, 0, g.x, g.y, g.r * 2);
+      glow.addColorStop(0, color);
+      glow.addColorStop(1, "rgba(0,0,0,0)");
+      ctx.fillStyle = glow;
+      ctx.beginPath();
+      ctx.arc(g.x, g.y, g.r * 2, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = color;
+      ctx.beginPath();
+      ctx.arc(g.x, g.y, g.r, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.strokeStyle = "rgba(255,255,255,0.8)";
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.arc(g.x, g.y, g.r + 10, 0, Math.PI * 2);
+      ctx.stroke();
+    }
+
+    function startFight() {
+      if (fightRunning) return;
+      fightRunning = true;
+      hp1 = hp2 = 100;
+      updateHP();
+      animateFight();
+    }
+
+    function animateFight() {
+      if (!fightRunning) return;
+
+      const dmg1 = Math.floor(Math.random() * 8) + 2;
+      const dmg2 = Math.floor(Math.random() * 8) + 2;
+      hp1 -= dmg2;
+      hp2 -= dmg1;
+
+      if (hp1 < 0) hp1 = 0;
+      if (hp2 < 0) hp2 = 0;
+
+      drawArena();
+
+      if (hp1 === 0 || hp2 === 0) {
+        fightRunning = false;
+        const winner = hp1 > hp2 ? "God 1 Wins" : hp2 > hp1 ? "God 2 Wins" : "Draw";
+        showToast(winner);
+        return;
+      }
+
+      animationId = requestAnimationFrame(() => {
+        setTimeout(animateFight, 300);
+      });
+    }
+
+    // initial render
+    renderStudents();
+    renderTeachers();
+    renderVotes();
+    updateCounts();
+  </script>
+
+  <footer>© مدرسه امیران</footer>
+</body>
+</html>
